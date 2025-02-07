@@ -16,4 +16,16 @@ export class UserRepository implements Repository<User> {
   async get(filter: Partial<User>): Promise<User | null> {
     return this.repository.findOne({ where: filter as FindOptionsWhere<User> });
   }
+
+  async update(id: number, payload: Partial<User>): Promise<User | null> {
+    const target = await this.repository.preload({
+      id,
+      ...payload
+    });
+
+    if (!target)
+      return null;
+
+    return this.repository.save(target);
+  }
 }

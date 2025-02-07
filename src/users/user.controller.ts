@@ -1,6 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTOs } from './user.dtos';
+import { JwtAuthGuard } from 'src/config/jwt.guard';
+import { Request } from 'express';
+import { AuthUser } from 'src/entities';
 
 @Controller('users/')
 export class UserController {
@@ -27,6 +30,19 @@ export class UserController {
       message: "User logged in",
       code: 200,
       token
+    }
+  }
+
+  @Put('update')
+  @UseGuards(JwtAuthGuard)
+  async update(@Req() req: Request, @Body() payload: UserDTOs.UpdateDTO): Promise<UserDTOs.UpdateResponse> {
+    const auth = req.user as AuthUser;
+
+    await this.userService.update(auth, payload);
+
+    return {
+      message: "User updated",
+      code: 200,
     }
   }
 }

@@ -35,7 +35,7 @@ export class User {
   }
 
   generateToken(): string {
-    const payload = {
+    const payload: AuthUser = {
       id: this.id,
       email: this.email,
     };
@@ -45,4 +45,9 @@ export class User {
 
     return sign(payload, secret, options);
   }
+}
+
+export class AuthUser {
+  id: number;
+  email: string;
 }

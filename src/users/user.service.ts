@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
-import { User } from 'src/entities';
+import { AuthUser, User } from 'src/entities';
 import { UserDTOs } from './user.dtos';
 import { UserException } from './user.exceptions';
 import { CommonException } from 'src/common/exceptions';
@@ -35,5 +35,14 @@ export class UserService {
       throw new UserException.InvalidCredentials();
 
     return user.generateToken();
+  }
+
+  async update(data: AuthUser, payload: UserDTOs.UpdateDTO): Promise<User> {
+    const result = await this.repository.update(data.id, payload);
+
+    if (!result)
+      throw new UserException.UserNotFound();
+
+    return result;
   }
 }
