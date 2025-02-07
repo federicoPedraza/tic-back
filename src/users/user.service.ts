@@ -24,7 +24,7 @@ export class UserService {
   }
 
   async login(email: string, password: string): Promise<string> {
-    const user = await this.repository.get({ email});
+    const user = await this.repository.get({ email });
 
     if (!user)
       throw new UserException.InvalidCredentials();
@@ -44,5 +44,18 @@ export class UserService {
       throw new UserException.UserNotFound();
 
     return result;
+  }
+
+  async profile(data: AuthUser): Promise<Partial<User>> {
+    const result = await this.repository.get({ id: data.id });
+
+    if (!result)
+      throw new UserException.UserNotFound();
+
+    return {
+      email: result.email,
+      firstName: result.firstName,
+      lastName: result.lastName,
+    };
   }
 }

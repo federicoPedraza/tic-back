@@ -1,4 +1,5 @@
 import { Response } from "src/common/response";
+import { User } from "src/entities";
 
 export namespace UserDTOs {
     // requests
@@ -29,6 +30,10 @@ export namespace UserDTOs {
     }
 
     export class UpdateResponse extends Response<UpdateResponse> {
+
+    }
+
+    export class UserProfileResponse extends Response<Partial<User>> {
 
     }
 }

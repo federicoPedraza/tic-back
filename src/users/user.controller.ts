@@ -45,4 +45,18 @@ export class UserController {
       code: 200,
     }
   }
+
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)
+  async profile(@Req() req: Request): Promise<UserDTOs.UserProfileResponse> {
+    const auth = req.user as AuthUser;
+
+    const profile = await this.userService.profile(auth);
+
+    return {
+      message: "User profile",
+      code: 200,
+      data: profile
+    }
+  }
 }

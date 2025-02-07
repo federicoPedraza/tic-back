@@ -38,6 +38,8 @@ export class User {
     const payload: AuthUser = {
       id: this.id,
       email: this.email,
+      firstName: this.firstName,
+      lastName: this.lastName
     };
 
     const secret = process.env.JWT_SECRET || 'default_secret';
@@ -50,4 +52,6 @@ export class User {
 export class AuthUser {
   id: number;
   email: string;
+  firstName: string;
+  lastName: string;
 }
