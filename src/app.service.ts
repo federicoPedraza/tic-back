@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello Crab!';
+  check(email?: string): string {
+    if (email)
+      return `Hello ${email.split("@")[0]}!`;
+    return 'Hello unknown crab!';
   }
 }
