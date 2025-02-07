@@ -14,4 +14,11 @@ export namespace UserException {
             public code: number = 401
         ) {}
     }
+
+    export class UserAlreadyExists implements Error {
+        constructor(
+            public message: string = 'User already exists',
+            public code: number = 409
+        ) {}
+    }
 }

@@ -7,3 +7,12 @@ export abstract class Error {
         this.code = code;
     }
 }
+
+
+export namespace CommonException {
+    export class InternalServerError extends Error {
+        constructor() {
+            super("Internal Server Error", 500);
+        }
+    }
+}

@@ -5,6 +5,8 @@ export namespace UserDTOs {
     export class SignupDTO {
         email: string;
         password: string;
+        firstName: string;
+        lastName: string;
     }
 
     export class LoginDTO {

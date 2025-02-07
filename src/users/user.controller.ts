@@ -10,7 +10,7 @@ export class UserController {
   async signUp(@Body() payload: UserDTOs.SignupDTO): Promise<UserDTOs.SignupResponse> {
     const user = await this.userService.signup(payload);
 
-    const token = await this.userService.login(user.email, user.password);
+    const token = user.generateToken();
 
     return {
       message: "User created",

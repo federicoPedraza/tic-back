@@ -3,13 +3,24 @@ import { UserRepository } from './user.repository';
 import { User } from 'src/entities';
 import { UserDTOs } from './user.dtos';
 import { UserException } from './user.exceptions';
+import { CommonException } from 'src/common/exceptions';
 
 @Injectable()
 export class UserService {
   constructor(@Inject() private readonly repository: UserRepository) {}
 
   async signup(payload: UserDTOs.SignupDTO): Promise<User> {
-    return await this.repository.create(payload);
+    try {
+      const result = await this.repository.create(payload);
+      return result;
+    } catch (error) {
+      const code = error.code;
+
+      if (code === 'ER_DUP_ENTRY')
+        throw new UserException.UserAlreadyExists();
+
+      throw new CommonException.InternalServerError();
+    }
   }
 
   async login(email: string, password: string): Promise<string> {
