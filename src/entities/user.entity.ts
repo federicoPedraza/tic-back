@@ -3,6 +3,12 @@ import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } fr
 import * as bcrypt from "bcrypt"
 import { sign } from 'jsonwebtoken';
 
+
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user'
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -19,6 +25,9 @@ export class User {
 
   @Column()
   password: string; // Remember: In production, store a hashed password
+
+  @Column({ type: 'enum', enum: UserRole, default:  UserRole.USER })
+  role: UserRole;
 
   @BeforeInsert()
   async hashPasswordBeforeInsert(): Promise<void> {
@@ -39,7 +48,8 @@ export class User {
       id: this.id,
       email: this.email,
       firstName: this.firstName,
-      lastName: this.lastName
+      lastName: this.lastName,
+      role: this.role
     };
 
     const secret = process.env.JWT_SECRET || 'default_secret';
@@ -54,4 +64,5 @@ export class AuthUser {
   email: string;
   firstName: string;
   lastName: string;
+  role: UserRole;
 }

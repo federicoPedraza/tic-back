@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTOs } from './user.dtos';
 import { JwtAuthGuard } from 'src/config/jwt.guard';
@@ -46,12 +46,13 @@ export class UserController {
     }
   }
 
-  @Get('profile')
+  @Get('/:id')
   @UseGuards(JwtAuthGuard)
-  async profile(@Req() req: Request): Promise<UserDTOs.UserProfileResponse> {
+  async profile(@Req() req: Request, @Param('id') param: string): Promise<UserDTOs.UserProfileResponse> {
     const auth = req.user as AuthUser;
+    const id = parseInt(param);
 
-    const profile = await this.userService.profile(auth);
+    const profile = await this.userService.profile(auth, id);
 
     return {
       message: "User profile",

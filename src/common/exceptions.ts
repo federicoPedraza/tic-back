@@ -15,4 +15,10 @@ export namespace CommonException {
             super("Internal Server Error", 500);
         }
     }
+
+    export class UnreachableResource extends Error {
+        constructor() {
+            super("Unreachable Resource", 503);
+        }
+    }
 }

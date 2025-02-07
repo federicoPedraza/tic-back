@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
-import { AuthUser, User } from 'src/entities';
+import { AuthUser, User, UserRole } from 'src/entities';
 import { UserDTOs } from './user.dtos';
 import { UserException } from './user.exceptions';
 import { CommonException } from 'src/common/exceptions';
@@ -46,8 +46,11 @@ export class UserService {
     return result;
   }
 
-  async profile(data: AuthUser): Promise<Partial<User>> {
-    const result = await this.repository.get({ id: data.id });
+  async profile(requester: AuthUser, id: number): Promise<Partial<User>> {
+    if (requester.id !== id && requester.role !== UserRole.ADMIN)
+      throw new CommonException.UnreachableResource();
+
+    const result = await this.repository.get({ id });
 
     if (!result)
       throw new UserException.UserNotFound();
