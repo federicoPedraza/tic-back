@@ -10,7 +10,7 @@ import { ConfigService } from '@nestjs/config';
 export class UserController {
   constructor(private readonly userService: UserService, private readonly configService: ConfigService) {}
 
-  @Get('exists')
+  @Post('exists')
   async exists(@Body() payload: { email: string }): Promise<UserDTOs.ExistsResponse> {
     const exists = await this.userService.exists(payload.email);
     const message = exists ? "User exists" : "User does not exist";
