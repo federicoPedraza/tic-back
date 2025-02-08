@@ -37,7 +37,7 @@ import { join } from 'path';
         entities: [User, Course, CoursePrice],
         cli: {
           migrationsDir: 'src/migrations',
-        }
+      }
       }),
     }),
     PassportModule.register({ defaultStrategy: 'jwt' }),

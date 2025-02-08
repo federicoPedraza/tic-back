@@ -9,7 +9,7 @@ export enum UserRole {
   USER = 'user'
 }
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -24,7 +24,7 @@ export class User {
   email: string;
 
   @Column()
-  password: string; // Remember: In production, store a hashed password
+  password: string;
 
   @Column({ type: 'enum', enum: UserRole, default:  UserRole.USER })
   role: UserRole;

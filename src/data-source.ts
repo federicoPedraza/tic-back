@@ -3,7 +3,11 @@ import { join } from 'path';
 import { config } from 'dotenv';
 
 config({
+<<<<<<< Updated upstream
   path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env',
+=======
+  path: process.env.NODE_ENV === 'development' ? '.env' : '.env.production',
+>>>>>>> Stashed changes
 });
 
 import { User } from './entities';
@@ -23,7 +27,7 @@ export const AppDataSource = new DataSource({
   migrations: [join(__dirname, '/migrations/*{.ts,.js}')],
   extra: {
     ssl: {
-      rejectUnauthorized: true,
+      rejectUnauthorized: process.env.NODE_ENV !== 'development',
     },
   },
 });
