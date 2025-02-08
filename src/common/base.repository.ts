@@ -1,4 +1,4 @@
-import { DeepPartial, ObjectLiteral, FindOptionsWhere, Repository as TypeORMRepository } from 'typeorm';
+import { DeepPartial, ObjectLiteral, FindOptionsWhere, Repository as TypeORMRepository, FindManyOptions } from 'typeorm';
 import { Repository } from './repository';
 import { Pagination } from './pagination';
 
@@ -18,18 +18,23 @@ export abstract class BaseRepository<T extends ObjectLiteral> implements Reposit
     let page = 1;
     let limit = 10;
 
+    let query: FindManyOptions = {
+      where: filter as FindOptionsWhere<T>,
+    };
+
     if (pagination) {
       page = pagination.page;
       limit = pagination.limit;
+      const skip = (page - 1) * limit;
+
+      query = {
+        ...query,
+        skip,
+        take: limit,
+      };
     }
 
-    const skip = (page - 1) * limit;
-
-    const [items, total] = await this.repository.findAndCount({
-      where: filter as FindOptionsWhere<T>,
-      skip,
-      take: limit,
-    });
+    const [items, total] = await this.repository.findAndCount(query);
 
     return new Pagination<G>(items as unknown as Array<G>, page, limit, total);
   }

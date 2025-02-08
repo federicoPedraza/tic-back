@@ -2,17 +2,7 @@ import { DataSource } from 'typeorm';
 import { join } from 'path';
 import { config } from 'dotenv';
 
-config({
-<<<<<<< Updated upstream
-  path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env',
-=======
-  path: process.env.NODE_ENV === 'development' ? '.env' : '.env.production',
->>>>>>> Stashed changes
-});
-
-import { User } from './entities';
-import { Course } from './entities/course.entity';
-import { CoursePrice } from './entities/course-price.entity';
+config();
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -23,7 +13,7 @@ export const AppDataSource = new DataSource({
   database: process.env.SQL_DATABASE,
   synchronize: false,
   logging: false,
-  entities: [User, Course, CoursePrice],
+  entities: [join(__dirname, '/entities/*{.ts,.js}')],
   migrations: [join(__dirname, '/migrations/*{.ts,.js}')],
   extra: {
     ssl: {

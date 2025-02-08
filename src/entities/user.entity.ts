@@ -1,8 +1,9 @@
 // src/entity/User.ts
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, OneToMany } from 'typeorm';
 import * as bcrypt from "bcrypt"
 import { sign } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
+import { Course } from './course.entity';
 
 export enum UserRole {
   ADMIN = 'admin',

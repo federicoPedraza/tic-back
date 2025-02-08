@@ -12,8 +12,9 @@ import { CourseModule } from './courses/course.module';
 import { CoursePriceModule } from './courses/course-prices/course-price.module';
 import { CoursePrice } from './entities/course-price.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import * as fs from 'fs';
 import { join } from 'path';
+import { CourseParticipantModule } from './courses/course-participants/course-participant.module';
+import { CourseParticipant } from './entities/course-participant.entity';
 
 @Module({
   imports: [
@@ -31,10 +32,10 @@ import { join } from 'path';
         username: configService.get<string>('SQL_USER'),
         password: configService.get<string>('SQL_PASSWORD'),
         database: configService.get<string>('SQL_DATABASE'),
-        synchronize: configService.get<string>('NODE') === 'development',
+        synchronize: false,
         migrations: [join(__dirname, './migrations/*{.ts,.js}')],
         logging: false,
-        entities: [User, Course, CoursePrice],
+        entities: [User, Course, CoursePrice, CourseParticipant],
         cli: {
           migrationsDir: 'src/migrations',
       }
@@ -47,7 +48,8 @@ import { join } from 'path';
     }),
     UserModule,
     CourseModule,
-    CoursePriceModule
+    CoursePriceModule,
+    CourseParticipantModule
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],
