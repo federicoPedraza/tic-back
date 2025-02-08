@@ -11,21 +11,28 @@ import { Course } from './entities/course.entity';
 import { CourseModule } from './courses/course.module';
 import { CoursePriceModule } from './courses/course-prices/course-price.module';
 import { CoursePrice } from './entities/course-price.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'squid',
-      password: 'squid',
-      database: 'theenglishcrab',
-      synchronize: true,
-      logging: false,
-      entities: [User, Course, CoursePrice],
-      migrations: [],
-      subscribers: [],
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: process.env.ENV === 'development' ? '.env' : '.env.production',
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get<string>('SQL_HOST'),
+        port: configService.get<number>('SQL_PORT'),
+        username: configService.get<string>('SQL_USER'),
+        password: configService.get<string>('SQL_PASSWORD'),
+        database: configService.get<string>('SQL_DATABASE'),
+        synchronize: true,  // Use with caution in production
+        logging: false,
+        entities: [User, Course, CoursePrice],
+      }),
     }),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
