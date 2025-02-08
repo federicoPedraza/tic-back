@@ -26,7 +26,8 @@ export class UserController {
   async signUp(@Body() payload: UserDTOs.SignupDTO): Promise<UserDTOs.SignupResponse> {
     const user = await this.userService.signup(payload);
 
-    const token = user.generateToken(this.configService);
+    // const token = user.generateToken(this.configService);
+    const token = "No token!";
 
     return {
       message: "User created",
