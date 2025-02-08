@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { UserDTOs } from './user.dtos';
 import { JwtAuthGuard } from 'src/config/jwt.guard';
 import { Request } from 'express';
-import { AuthUser, User } from 'src/entities';
+import { AuthUser } from 'src/entities';
 import { ConfigService } from '@nestjs/config';
 
 @Controller('users/')
@@ -26,8 +26,7 @@ export class UserController {
   async signUp(@Body() payload: UserDTOs.SignupDTO): Promise<UserDTOs.SignupResponse> {
     const user = await this.userService.signup(payload);
 
-    // const token = user.generateToken(this.configService);
-    const token = "No token!";
+    const token = user.generateToken(this.configService);
 
     return {
       message: "User created",
