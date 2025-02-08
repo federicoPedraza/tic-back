@@ -4,7 +4,7 @@ export namespace CoursePriceException {
     export class CoursePriceNotFound implements Error {
         constructor(
             public message: string = 'Course price not found',
-            public code: number = 401
+            public code: number = 400
         ) {}
     }
 }
