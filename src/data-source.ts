@@ -3,7 +3,7 @@ import { join } from 'path';
 import { config } from 'dotenv';
 
 config({
-  path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env',
+  path: '.env.production',
 });
 
 import { User } from './entities';
