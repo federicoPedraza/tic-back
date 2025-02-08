@@ -43,6 +43,10 @@ export class CourseParticipantService {
 
         await this.courseParticipantRepository.create({ course, email, phone });
 
+        const user = await this.userRepository.get({ email });
+        if (user && phone && user.phone !== phone)
+            await this.userRepository.update(user.id, { phone });
+
         return {
             email,
             courseName: course.name,
@@ -72,10 +76,8 @@ export class CourseParticipantService {
 
         await this.courseParticipantRepository.create({ course, email: user.email, phone: payload.phone });
 
-        //const phoneNumberMatches = user.phone === payload.phone;
-
         return {
-            phoneNumberMatches: true,
+            phoneNumberMatches: user.phone === payload.phone,
             userId: user.id,
             userName: user.firstName
         }
