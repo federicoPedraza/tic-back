@@ -17,7 +17,7 @@ import { CoursePrice } from './entities/course-price.entity';
 export const AppDataSource = new DataSource({
   type: 'mysql',
   host: process.env.SQL_HOST,
-  port: parseInt(process.env.SQL_PORT || '3306', 10),
+  port: parseInt(process.env.SQL_PORT || '1111', 10),
   username: process.env.SQL_USER,
   password: process.env.SQL_PASSWORD,
   database: process.env.SQL_DATABASE,
