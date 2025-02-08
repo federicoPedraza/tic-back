@@ -2,7 +2,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from 'typeorm';
 import * as bcrypt from "bcrypt"
 import { sign } from 'jsonwebtoken';
-
+import { ConfigService } from '@nestjs/config';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -43,16 +43,16 @@ export class User {
     return await bcrypt.compare(password, this.password);
   }
 
-  generateToken(): string {
+  generateToken(configService: ConfigService): string {
     const payload: AuthUser = {
       id: this.id,
       email: this.email,
       firstName: this.firstName,
       lastName: this.lastName,
-      role: this.role
+      role: this.role,
     };
 
-    const secret = process.env.JWT_SECRET || 'default_secret';
+    const secret = configService.get<string>('JWT_SECRET', 'default_secret');
     const options = { expiresIn: '1h' as const };
 
     return sign(payload, secret, options);

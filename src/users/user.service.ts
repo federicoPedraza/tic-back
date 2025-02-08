@@ -4,10 +4,14 @@ import { AuthUser, User, UserRole } from 'src/entities';
 import { UserDTOs } from './user.dtos';
 import { UserException } from './user.exceptions';
 import { CommonException } from 'src/common/exceptions';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
-  constructor(@Inject() private readonly repository: UserRepository) {}
+  constructor(
+    @Inject() private readonly repository: UserRepository,
+    @Inject() private readonly configService: ConfigService
+  ) {}
 
   async signup(payload: UserDTOs.SignupDTO): Promise<User> {
     try {
@@ -34,7 +38,7 @@ export class UserService {
     if (!matches)
       throw new UserException.InvalidCredentials();
 
-    return user.generateToken();
+    return user.generateToken(this.configService);
   }
 
   async update(data: AuthUser, payload: UserDTOs.UpdateDTO): Promise<User> {

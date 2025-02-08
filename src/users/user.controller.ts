@@ -4,10 +4,11 @@ import { UserDTOs } from './user.dtos';
 import { JwtAuthGuard } from 'src/config/jwt.guard';
 import { Request } from 'express';
 import { AuthUser, User } from 'src/entities';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('users/')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService, private readonly configService: ConfigService) {}
 
   @Get('exists')
   async exists(@Body() payload: { email: string }): Promise<UserDTOs.ExistsResponse> {
@@ -25,7 +26,7 @@ export class UserController {
   async signUp(@Body() payload: UserDTOs.SignupDTO): Promise<UserDTOs.SignupResponse> {
     const user = await this.userService.signup(payload);
 
-    const token = user.generateToken();
+    const token = user.generateToken(this.configService);
 
     return {
       message: "User created",
@@ -34,7 +35,7 @@ export class UserController {
     }
   }
 
-  @Get('login')
+  @Post('login')
   async login(@Body() payload: UserDTOs.LoginDTO): Promise<UserDTOs.LoginResponse> {
     const token = await this.userService.login(payload.email, payload.password);
 
