@@ -7,4 +7,8 @@ export class AppService {
       return `Hello ${email.split("@")[0]}!`;
     return 'Hello unknown crab!';
   }
+
+  admin(email: string) {
+    return `Hello admin ${email.split("@")[0]}!`;
+  }
 }

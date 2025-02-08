@@ -4,6 +4,7 @@ import * as bcrypt from "bcrypt"
 import { sign } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import { Course } from './course.entity';
+import { Exclude } from 'class-transformer';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -27,6 +28,7 @@ export class User {
   @Column({ nullable: true })
   phone?: string;
 
+  @Exclude()
   @Column()
   password: string;
 

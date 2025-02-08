@@ -15,6 +15,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { CourseParticipantModule } from './courses/course-participants/course-participant.module';
 import { CourseParticipant } from './entities/course-participant.entity';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { CourseParticipant } from './entities/course-participant.entity';
       signOptions: { expiresIn: '1h' },
     }),
     UserModule,
+    AdminModule,
     CourseModule,
     CoursePriceModule,
     CourseParticipantModule
