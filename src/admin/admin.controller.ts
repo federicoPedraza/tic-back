@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Put, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AdminService } from './admin.service';
@@ -22,6 +22,19 @@ export class AdminController {
       message: "User updated",
       code: 200,
       data: changes
+    }
+  }
+
+  @ApiOperation({ summary: "Deletes an user" })
+  @Delete('user/:id')
+  @UseGuards(JwtAdminAuthGuard)
+  async delete(@Param('id') userId: string): Promise<AdminDTO.DeleteUserResponse> {
+    const data = await this.adminService.deleteUser(parseInt(userId));
+
+    return {
+      message: "User deleted",
+      code: 200,
+      data
     }
   }
 }

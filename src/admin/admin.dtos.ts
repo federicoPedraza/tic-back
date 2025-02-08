@@ -1,4 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
+import { Response } from 'src/common/response';
 
 
 export namespace AdminDTO {
@@ -16,4 +17,11 @@ export namespace AdminDTO {
     }
 
     // responses
+    export class DeleteUserResponse extends Response<DeleteUserResponsePayload> {
+
+    }
+
+    export class DeleteUserResponsePayload {
+        coursesCount: number = 0;
+    }
 }

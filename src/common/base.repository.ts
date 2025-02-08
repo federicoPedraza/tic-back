@@ -56,4 +56,12 @@ export abstract class BaseRepository<T extends ObjectLiteral> implements Reposit
     await this.repository.remove(entity);
     return true;
   }
+
+  async removeMany(filter: Partial<T>): Promise<number> {
+    const entities = await this.repository.find({ where: filter as FindOptionsWhere<T> });
+    if (!entities.length) return 0;
+
+    await this.repository.remove(entities);
+    return entities.length;
+  }
 }
