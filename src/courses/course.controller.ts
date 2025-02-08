@@ -25,7 +25,6 @@ export class CourseController {
     @Post('create')
     @UseGuards(JwtAuthGuard)
     async createCourse(@Body() payload: CourseDTO.CreateCourse): Promise<CourseDTO.GetCourse> {
-        console.log(payload);
         const course = await this.courseService.create(payload);
 
         return {

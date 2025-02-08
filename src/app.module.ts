@@ -17,7 +17,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: process.env.ENV === 'development' ? '.env' : '.env.production',
+      envFilePath: process.env.NODE_ENV === 'development' ? '.env' : '.env.production',
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
