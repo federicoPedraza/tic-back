@@ -6,6 +6,10 @@ config({
   path: '.env.production',
 });
 
+console.log('SQL_HOST', process.env.SQL_HOST);
+console.log('SQL_PORT', process.env.SQL_PORT);
+console.log('SQL_USER', process.env.SQL_USER);
+
 import { User } from './entities';
 import { Course } from './entities/course.entity';
 import { CoursePrice } from './entities/course-price.entity';
