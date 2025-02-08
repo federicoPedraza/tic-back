@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Course } from './course.entity';
 
 @Entity({ name: 'course_participants' })
@@ -25,5 +25,9 @@ export class CourseParticipant {
     updatedAt: Date;
 
     @ManyToOne(() => Course, course => course.participants)
+    @JoinColumn({ name: 'courseId' })
     course: Course;
+
+    @Column({ name: 'courseId', select: false })
+    readonly courseId: number;
 }

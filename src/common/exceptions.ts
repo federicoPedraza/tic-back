@@ -21,4 +21,10 @@ export namespace CommonException {
             super("Unreachable Resource", 503);
         }
     }
+
+    export class BadRequest extends Error {
+        constructor() {
+            super("Bad Request", 400);
+        }
+    }
 }
