@@ -1,7 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { CoursePrice } from './course-price.entity';
+import { CourseParticipant } from './course-participant.entity';
 
-@Entity()
+@Entity({ name: 'courses' })
 export class Course {
     @PrimaryGeneratedColumn()
     id: number;
@@ -32,4 +33,7 @@ export class Course {
 
     @OneToMany(() => CoursePrice, coursePrice => coursePrice.course)
     prices: CoursePrice[];
+
+    @OneToMany(() => CourseParticipant, courseParticipant => courseParticipant.course)
+    participants: CourseParticipant[];
 }

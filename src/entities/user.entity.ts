@@ -1,15 +1,17 @@
 // src/entity/User.ts
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, OneToMany } from 'typeorm';
 import * as bcrypt from "bcrypt"
 import { sign } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
+import { Course } from './course.entity';
+import { Exclude } from 'class-transformer';
 
 export enum UserRole {
   ADMIN = 'admin',
   USER = 'user'
 }
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -23,8 +25,12 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Column({ nullable: true })
+  phone?: string;
+
+  @Exclude()
   @Column()
-  password: string; // Remember: In production, store a hashed password
+  password: string;
 
   @Column({ type: 'enum', enum: UserRole, default:  UserRole.USER })
   role: UserRole;

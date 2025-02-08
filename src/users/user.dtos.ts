@@ -31,6 +31,9 @@ export namespace UserDTOs {
         @IsOptional()
         @IsString()
         lastName: string | undefined;
+        @IsOptional()
+        @IsString()
+        phone: string | undefined;
     }
 
     // responses

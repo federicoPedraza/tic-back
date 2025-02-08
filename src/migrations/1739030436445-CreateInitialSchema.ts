@@ -2,7 +2,6 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class CreateInitialSchema1739030436445 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Create the "users" table
     await queryRunner.query(`
       CREATE TABLE IF NOT EXISTS \`users\` (
         \`id\` INT AUTO_INCREMENT PRIMARY KEY,
@@ -16,9 +15,8 @@ export class CreateInitialSchema1739030436445 implements MigrationInterface {
       );
     `);
 
-    // Create the "course" table
     await queryRunner.query(`
-      CREATE TABLE IF NOT EXISTS \`course\` (
+      CREATE TABLE IF NOT EXISTS \`courses\` (
         \`id\` INT NOT NULL AUTO_INCREMENT,
         \`name\` VARCHAR(100) NOT NULL,
         \`description\` VARCHAR(255) NOT NULL DEFAULT '',
@@ -32,23 +30,22 @@ export class CreateInitialSchema1739030436445 implements MigrationInterface {
       ) ENGINE=InnoDB;
     `);
 
-    // Create the "course_price" table
     await queryRunner.query(`
-      CREATE TABLE IF NOT EXISTS \`course_price\` (
+      CREATE TABLE IF NOT EXISTS \`course_prices\` (
         \`id\` INT NOT NULL AUTO_INCREMENT,
         \`price\` DECIMAL(10,2) NOT NULL,
         \`currency\` VARCHAR(3) NOT NULL,
         \`courseId\` INT NULL,
         PRIMARY KEY (\`id\`),
-        CONSTRAINT \`FK_course_price_course\` FOREIGN KEY (\`courseId\`) REFERENCES \`course\`(\`id\`)
+        CONSTRAINT \`FK_course_price_course\` FOREIGN KEY (\`courseId\`) REFERENCES \`courses\`(\`id\`)
       ) ENGINE=InnoDB;
     `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     // Drop tables in reverse order of dependencies:
-    await queryRunner.query(`DROP TABLE IF EXISTS \`course_price\`;`);
-    await queryRunner.query(`DROP TABLE IF EXISTS \`course\`;`);
+    await queryRunner.query(`DROP TABLE IF EXISTS \`course_prices\`;`);
+    await queryRunner.query(`DROP TABLE IF EXISTS \`courses\`;`);
     await queryRunner.query(`DROP TABLE IF EXISTS \`users\`;`);
   }
 }
