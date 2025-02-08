@@ -1,17 +1,25 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CourseDTO } from './course.dtos';
 import { JwtAuthGuard } from 'src/config/jwt.guard';
 import { CoursePriceService } from './course-prices/course-price.service';
+import { Pagination } from 'src/common/pagination';
+import { Course } from 'src/entities/course.entity';
+import { OptionalJwtAuthGuard } from 'src/config/jwt-optional.guard';
+import { Request } from 'express';
+import { AuthUser } from 'src/entities';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-@Controller('courses/')
+@ApiTags('courses')
+@Controller('courses')
 export class CourseController {
     constructor(
         private readonly courseService: CourseService,
         private readonly coursePriceService: CoursePriceService
     ) { }
 
-    @Get(":id")
+    @ApiOperation({ summary: 'Get course details' })
+    @Get("details/:id")
     async getCourse(id: number): Promise<CourseDTO.GetCourse> {
         const course = await this.courseService.get(id);
 
@@ -22,6 +30,32 @@ export class CourseController {
         }
     }
 
+    @ApiOperation({ summary: 'Get list of courses' })
+    @Get('list')
+    @UseGuards(OptionalJwtAuthGuard)
+    async getCourses(@Query() query: CourseDTO.GetCoursesQuery, @Req() request: Request): Promise<CourseDTO.GetCourses> {
+        const user = request.user as AuthUser | null;
+        const filter: Partial<Course> = {};
+
+        if (query.name) {
+            filter.name = query.name;
+        }
+
+        if (!user || user.role !== 'admin') {
+            filter.isPublished = true;
+        }
+
+        const pagination = new Pagination<Partial<Course>>([], query.page, query.limit, 0);
+        const courses = await this.courseService.list(filter, pagination);
+
+        return {
+            message: "Courses retrieved successfully",
+            code: 200,
+            data: courses
+        }
+    }
+
+    @ApiOperation({ summary: 'Create a new course' })
     @Post('create')
     @UseGuards(JwtAuthGuard)
     async createCourse(@Body() payload: CourseDTO.CreateCourse): Promise<CourseDTO.GetCourse> {
@@ -34,6 +68,7 @@ export class CourseController {
         }
     }
 
+    @ApiOperation({ summary: 'Update course' })
     @Put('update/:id')
     @UseGuards(JwtAuthGuard)
     async updateCourse(@Param('id') param: string, @Body() payload: CourseDTO.UpdateCourse): Promise<CourseDTO.GetCourse> {
@@ -48,6 +83,7 @@ export class CourseController {
         }
     }
 
+    @ApiOperation({ summary: 'Updates a price given a course id' })
     @Put('update/:courseId/prices')
     @UseGuards(JwtAuthGuard)
     async updatePrice(@Param('courseId') courseId: string, @Body() payload: CourseDTO.UpdateCoursePrice): Promise<CourseDTO.GetCourse> {

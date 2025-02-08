@@ -1,5 +1,6 @@
 import { DeepPartial, ObjectLiteral, FindOptionsWhere, Repository as TypeORMRepository } from 'typeorm';
 import { Repository } from './repository';
+import { Pagination } from './pagination';
 
 export abstract class BaseRepository<T extends ObjectLiteral> implements Repository<T> {
   constructor(protected readonly repository: TypeORMRepository<T>) {}
@@ -12,6 +13,27 @@ export abstract class BaseRepository<T extends ObjectLiteral> implements Reposit
   async get(filter: Partial<T>): Promise<T | null> {
     return this.repository.findOne({ where: filter as FindOptionsWhere<T> });
   }
+
+  async getAll<G>(filter: Partial<T>, pagination?: Pagination<G>): Promise<Pagination<G>> {
+    let page = 1;
+    let limit = 10;
+
+    if (pagination) {
+      page = pagination.page;
+      limit = pagination.limit;
+    }
+
+    const skip = (page - 1) * limit;
+
+    const [items, total] = await this.repository.findAndCount({
+      where: filter as FindOptionsWhere<T>,
+      skip,
+      take: limit,
+    });
+
+    return new Pagination<G>(items as unknown as Array<G>, page, limit, total);
+  }
+
 
   async update(id: number, payload: DeepPartial<T>): Promise<T | null> {
     const entity = await this.repository.preload({
