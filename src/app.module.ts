@@ -9,6 +9,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './config/jwt.strategy';
 import { Course } from './entities/course.entity';
 import { CourseModule } from './courses/course.module';
+import { CoursePriceModule } from './courses/course-prices/course-price.module';
+import { CoursePrice } from './entities/course-price.entity';
 
 @Module({
   imports: [
@@ -21,7 +23,7 @@ import { CourseModule } from './courses/course.module';
       database: 'theenglishcrab',
       synchronize: true,
       logging: false,
-      entities: [User, Course],
+      entities: [User, Course, CoursePrice],
       migrations: [],
       subscribers: [],
     }),
@@ -31,7 +33,8 @@ import { CourseModule } from './courses/course.module';
       signOptions: { expiresIn: '1h' },
     }),
     UserModule,
-    CourseModule
+    CourseModule,
+    CoursePriceModule
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],

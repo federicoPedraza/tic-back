@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseRepository } from 'src/common/base.repository';
-import { Course } from 'src/entities/course.entity';
+import { User } from 'src/entities';
+import { CoursePrice } from 'src/entities/course-price.entity';
 import { Repository as TypeORMRepository } from 'typeorm';
 
 @Injectable()
-export class CourseRepository extends BaseRepository<Course> {
+export class CoursePriceRepository extends BaseRepository<CoursePrice> {
   constructor(
-    @InjectRepository(Course)
-    repository: TypeORMRepository<Course>,
+    @InjectRepository(CoursePrice)
+    repository: TypeORMRepository<CoursePrice>,
   ) {
     super(repository);
   }

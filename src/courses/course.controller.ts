@@ -2,10 +2,14 @@ import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/comm
 import { CourseService } from './course.service';
 import { CourseDTO } from './course.dtos';
 import { JwtAuthGuard } from 'src/config/jwt.guard';
+import { CoursePriceService } from './course-prices/course-price.service';
 
 @Controller('courses/')
 export class CourseController {
-    constructor(private readonly courseService: CourseService) { }
+    constructor(
+        private readonly courseService: CourseService,
+        private readonly coursePriceService: CoursePriceService
+    ) { }
 
     @Get(":id")
     async getCourse(id: number): Promise<CourseDTO.GetCourse> {
@@ -42,6 +46,28 @@ export class CourseController {
             message: "Course updated successfully",
             code: 200,
             data: course
+        }
+    }
+
+    @Put('update/:courseId/prices')
+    @UseGuards(JwtAuthGuard)
+    async updatePrice(@Param('courseId') courseId: string, @Body() payload: CourseDTO.UpdateCoursePrice): Promise<CourseDTO.GetCourse> {
+        let message: string = "Operation not made"
+
+        switch(payload.operation) {
+            case 'add/update':
+                await this.coursePriceService.addOrUpdate(parseInt(courseId), payload);
+                message = "Course price updated successfully";
+                break;
+            case 'remove':
+                await this.coursePriceService.remove(payload.currency);
+                message = "Course price removed successfully"
+                break;
+        }
+
+        return {
+            message,
+            code: 200,
         }
     }
 }
