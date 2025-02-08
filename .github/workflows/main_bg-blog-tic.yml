@@ -27,18 +27,6 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
-      - name: Debug Environment Variables
-        run: |
-          echo "SQL_HOST: $SQL_HOST"
-          echo "SQL_DATABASE: $SQL_DATABASE"
-          echo "SQL_USER: $SQL_USER"
-          # For security, avoid echoing sensitive variables like SQL_PASSWORD
-        env:
-          SQL_HOST: ${{ secrets.SQL_HOST }}
-          SQL_DATABASE: ${{ secrets.SQL_DATABASE }}
-          SQL_USER: ${{ secrets.SQL_USER }}
-          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
-
       - name: Run Database Migrations
         run: |
           npx typeorm migration:run -d ./dist/data-source.js
