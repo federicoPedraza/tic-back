@@ -27,7 +27,7 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
-      - name: run migrations
+      - name: Run Database Migrations
         run: |
           npx typeorm migration:run -d ./dist/data-source.js
         env:
