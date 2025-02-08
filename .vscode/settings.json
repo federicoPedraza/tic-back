@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/3a149299-d820-4ae4-8366-3d425e2fda92/resourceGroups/be-blog-rg/providers/Microsoft.Web/sites/bg-blog-tic",
+    "appService.deploySubpath": "."
+}

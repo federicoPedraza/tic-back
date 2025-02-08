@@ -12,6 +12,8 @@ import { CourseModule } from './courses/course.module';
 import { CoursePriceModule } from './courses/course-prices/course-price.module';
 import { CoursePrice } from './entities/course-price.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import * as fs from 'fs';
+import { join } from 'path';
 
 @Module({
   imports: [
