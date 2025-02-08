@@ -3,6 +3,7 @@ import { CourseRepository } from './course.repository';
 import { CourseException } from './course.exceptions';
 import { Course } from 'src/entities/course.entity';
 import { CourseDTO } from './course.dtos';
+import { Pagination } from 'src/common/pagination';
 
 @Injectable()
 export class CourseService {
@@ -38,5 +39,9 @@ export class CourseService {
       throw new CourseException.CourseNotFound();
 
     return course;
+  }
+
+  async list(filter: Partial<Course>, pagination?: Pagination<Partial<Course>>): Promise<Pagination<Partial<Course>>> {
+    return await this.repository.getAll<Partial<Course>>(filter, pagination);
   }
 }

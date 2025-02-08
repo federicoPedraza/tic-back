@@ -6,10 +6,21 @@ import { HttpExceptionFilter } from './common/exception.filter';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { ConfigService } from '@nestjs/config';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const config = new DocumentBuilder()
+    .setTitle("NestJS - The English Crab - API")
+    .setDescription("The English Crab API Documentation")
+    .setVersion("1.0")
+    .addTag("users, courses")
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
 
   app.use(helmet());
 
@@ -32,6 +43,5 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(configService.get<number>("PORT") || 3000);
-  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

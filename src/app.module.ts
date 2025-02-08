@@ -31,9 +31,13 @@ import { join } from 'path';
         username: configService.get<string>('SQL_USER'),
         password: configService.get<string>('SQL_PASSWORD'),
         database: configService.get<string>('SQL_DATABASE'),
-        synchronize: true,  // Use with caution in production
+        synchronize: configService.get<string>('NODE') === 'development',
+        migrations: [join(__dirname, './migrations/*{.ts,.js}')],
         logging: false,
         entities: [User, Course, CoursePrice],
+        cli: {
+          migrationsDir: 'src/migrations',
+        }
       }),
     }),
     PassportModule.register({ defaultStrategy: 'jwt' }),

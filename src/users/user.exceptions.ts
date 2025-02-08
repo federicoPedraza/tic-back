@@ -4,7 +4,7 @@ export namespace UserException {
     export class UserNotFound implements Error {
         constructor(
             public message: string = 'User not found',
-            public code: number = 401
+            public code: number = 400
         ) {}
     }
 

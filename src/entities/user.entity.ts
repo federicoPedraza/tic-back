@@ -53,7 +53,6 @@ export class User {
     };
 
     const secret = configService.get<string>('JWT_SECRET', 'default_secret');
-    console.log(secret);
     const options = { expiresIn: '1h' as const };
 
     return sign(payload, secret, options);

@@ -3,13 +3,16 @@ import { UserService } from './user.service';
 import { UserDTOs } from './user.dtos';
 import { JwtAuthGuard } from 'src/config/jwt.guard';
 import { Request } from 'express';
-import { AuthUser, User } from 'src/entities';
+import { AuthUser } from 'src/entities';
 import { ConfigService } from '@nestjs/config';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('users/')
+@ApiTags('users')
 export class UserController {
   constructor(private readonly userService: UserService, private readonly configService: ConfigService) {}
 
+  @ApiOperation({ summary: 'Check if user exists' })
   @Post('exists')
   async exists(@Body() payload: { email: string }): Promise<UserDTOs.ExistsResponse> {
     const exists = await this.userService.exists(payload.email);
@@ -22,12 +25,12 @@ export class UserController {
     }
   }
 
+  @ApiOperation({ summary: 'Create a new user. Also signs in and returns token' })
   @Post('sign-up')
   async signUp(@Body() payload: UserDTOs.SignupDTO): Promise<UserDTOs.SignupResponse> {
     const user = await this.userService.signup(payload);
 
-    // const token = user.generateToken(this.configService);
-    const token = "No token!";
+    const token = user.generateToken(this.configService);
 
     return {
       message: "User created",
@@ -36,6 +39,7 @@ export class UserController {
     }
   }
 
+  @ApiOperation({ summary: 'Login user' })
   @Post('login')
   async login(@Body() payload: UserDTOs.LoginDTO): Promise<UserDTOs.LoginResponse> {
     const token = await this.userService.login(payload.email, payload.password);
@@ -47,6 +51,7 @@ export class UserController {
     }
   }
 
+  @ApiOperation({ summary: 'Update user' })
   @Put('update')
   @UseGuards(JwtAuthGuard)
   async update(@Req() req: Request, @Body() payload: UserDTOs.UpdateDTO): Promise<UserDTOs.UpdateResponse> {
@@ -60,6 +65,7 @@ export class UserController {
     }
   }
 
+  @ApiOperation({ summary: 'Get user profile' })
   @Get('/:id')
   @UseGuards(JwtAuthGuard)
   async profile(@Req() req: Request, @Param('id') param: string): Promise<UserDTOs.UserProfileResponse> {
