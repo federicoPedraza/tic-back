@@ -2,9 +2,7 @@ import { DataSource } from 'typeorm';
 import { join } from 'path';
 import { config } from 'dotenv';
 
-config({
-  path: '.env.production',
-});
+config();
 
 console.log('SQL_HOST', process.env.SQL_HOST);
 console.log('SQL_PORT', process.env.SQL_PORT);
