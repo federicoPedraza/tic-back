@@ -61,4 +61,10 @@ export class UserService {
       lastName: result.lastName,
     };
   }
+
+  async exists(email: string): Promise<boolean> {
+    const result = await this.repository.get({ email });
+
+    return !!result;
+  }
 }

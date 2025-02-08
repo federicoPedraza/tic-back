@@ -3,11 +3,23 @@ import { UserService } from './user.service';
 import { UserDTOs } from './user.dtos';
 import { JwtAuthGuard } from 'src/config/jwt.guard';
 import { Request } from 'express';
-import { AuthUser } from 'src/entities';
+import { AuthUser, User } from 'src/entities';
 
 @Controller('users/')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Get('exists')
+  async exists(@Body() payload: { email: string }): Promise<UserDTOs.ExistsResponse> {
+    const exists = await this.userService.exists(payload.email);
+    const message = exists ? "User exists" : "User does not exist";
+
+    return {
+      message,
+      code: 200,
+      exists
+    }
+  }
 
   @Post('sign-up')
   async signUp(@Body() payload: UserDTOs.SignupDTO): Promise<UserDTOs.SignupResponse> {

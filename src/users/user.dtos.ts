@@ -36,4 +36,8 @@ export namespace UserDTOs {
     export class UserProfileResponse extends Response<Partial<User>> {
 
     }
+
+    export class ExistsResponse extends Response<ExistsResponse> {
+        exists: boolean;
+    }
 }
