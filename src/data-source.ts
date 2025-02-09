@@ -3,6 +3,7 @@ import { join } from 'path';
 import { config } from 'dotenv';
 
 config();
+console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
