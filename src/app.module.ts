@@ -34,9 +34,9 @@ import { AdminModule } from './admin/admin.module';
         password: configService.get<string>('SQL_PASSWORD'),
         database: configService.get<string>('SQL_DATABASE'),
         synchronize: false,
-        migrations: [join(__dirname, './migrations/*{.ts,.js}')],
+        entities: [join(__dirname, '/entities/*{.ts,.js}')],
+        migrations: [join(__dirname, '/migrations/*{.ts,.js}')],
         logging: false,
-        entities: [User, Course, CoursePrice, CourseParticipant],
         cli: {
           migrationsDir: 'src/migrations',
       }

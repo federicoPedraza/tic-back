@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import { IsBoolean, IsDate, IsNumber, IsOptional, IsString, Min } from "class-validator";
 import { Pagination } from "src/common/pagination";
 import { Response } from "src/common/response";
@@ -14,12 +15,15 @@ export namespace CourseDTO {
         description: string = '';
         @IsOptional()
         @IsDate()
+        @Type(() => Date)
         startsAt: Date | undefined;
         @IsOptional()
         @IsDate()
+        @Type(() => Date)
         endsAt: Date | undefined;
         @IsOptional()
         @IsDate()
+        @Type(() => Date)
         postedAt: Date | undefined;
     }
 
@@ -27,19 +31,22 @@ export namespace CourseDTO {
         @IsString()
         name: string;
         @IsOptional()
-        @IsString()
+        @IsBoolean()
         isPublished: boolean = false;
         @IsOptional()
         @IsString()
         description: string = '';
         @IsOptional()
         @IsDate()
+        @Type(() => Date)
         startsAt: Date | undefined;
         @IsOptional()
         @IsDate()
+        @Type(() => Date)
         endsAt: Date | undefined;
         @IsOptional()
         @IsDate()
+        @Type(() => Date)
         postedAt: Date | undefined;
     }
 
