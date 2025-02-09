@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 
 config();
 console.log('process.env.NODE_ENV', process.env.NODE_ENV);
+console.log('process.env.SQL_USER', process.env.SQL_USER);
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -18,7 +19,7 @@ export const AppDataSource = new DataSource({
   migrations: [join(__dirname, '/migrations/*{.ts,.js}')],
   extra: {
     ssl: {
-      rejectUnauthorized: process.env.NODE_ENV === 'development',
+      rejectUnauthorized: process.env.NODE_ENV !== 'development',
     },
   },
 });
