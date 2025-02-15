@@ -5,6 +5,7 @@ import { sign } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import { Course } from './course.entity';
 import { Exclude } from 'class-transformer';
+import { CourseReview } from './course-review.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -34,6 +35,9 @@ export class User {
 
   @Column({ type: 'enum', enum: UserRole, default:  UserRole.USER })
   role: UserRole;
+
+  @OneToMany(() => CourseReview, courseReview => courseReview.user)
+  reviews: CourseReview[];
 
   @BeforeInsert()
   async hashPasswordBeforeInsert(): Promise<void> {

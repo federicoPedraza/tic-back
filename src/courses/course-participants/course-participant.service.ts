@@ -72,9 +72,15 @@ export class CourseParticipantService {
 
         const participant = await this.courseParticipantRepository.get({ courseId, email: user.email });
         if (participant)
-            throw new CourseException.ParticipantAlreadyExists();
+            if (!participant.isConfirmed) {
+                await this.courseParticipantRepository.update(participant.id, { isConfirmed: true });
+            } else {
+                throw new CourseException.ParticipantAlreadyExists();
+            }
+        else {
+            await this.courseParticipantRepository.create({ course, email: user.email, phone: payload.phone });
+        }
 
-        await this.courseParticipantRepository.create({ course, email: user.email, phone: payload.phone });
 
         return {
             phoneNumberMatches: user.phone === payload.phone,
