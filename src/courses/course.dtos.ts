@@ -57,7 +57,13 @@ export namespace CourseDTO {
         price: number = 0;
         @IsString()
         currency: string;
+        @IsString()
         operation: 'add/update' | 'remove';
+    }
+
+    export class UpdateCourseStatus {
+        @IsString()
+        operation: 'start' | 'end';
     }
 
     export class GetCoursesQuery {
@@ -71,7 +77,15 @@ export namespace CourseDTO {
 
     }
 
-    export class GetCourses extends Response<Pagination<Partial<Course>>> {
+    export class GetCourses extends Response<Pagination<Partial<ExtraCourseDetails>>> {
+
+    }
+
+    export class ExtraCourseDetails extends Course {
+        live: boolean;
+    }
+
+    export class UpdateCourseStatusResponse extends Response<string> {
 
     }
 }

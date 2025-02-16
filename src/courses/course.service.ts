@@ -41,7 +41,43 @@ export class CourseService {
     return course;
   }
 
-  async list(filter: Partial<Course>, pagination?: Pagination<Partial<Course>>): Promise<Pagination<Partial<Course>>> {
-    return await this.repository.getAll<Partial<Course>>(filter, pagination);
+  async list(filter: Partial<Course>, pagination?: Pagination<Partial<CourseDTO.ExtraCourseDetails>>): Promise<Pagination<Partial<CourseDTO.ExtraCourseDetails>>> {
+    const courses = await this.repository.getAll<Partial<CourseDTO.ExtraCourseDetails>>(filter, pagination);
+
+    courses.items = courses.items.map(course => {
+      return {
+        ...course,
+        live: course && course.isOngoing ? course.isOngoing() : false
+      }
+    });
+
+
+    return courses;
+  }
+
+  async startCourse(id: number): Promise<Date> {
+    const course = await this.repository.get({ id });
+
+    if (!course)
+      throw new CourseException.CourseNotFound();
+
+    if (course.hasStarted())
+      throw new CourseException.CourseAlreadyStarted();
+
+    await this.repository.update(id, { startsAt: new Date() });
+    return new Date();
+  }
+
+  async endCourse(id: number): Promise<Date> {
+    const course = await this.repository.get({ id });
+
+    if (!course)
+      throw new CourseException.CourseNotFound();
+
+    if (!course.hasStarted())
+      throw new CourseException.CourseHasNotStarted();
+
+    await this.repository.update(id, { endsAt: new Date() });
+    return new Date();
   }
 }

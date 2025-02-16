@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CourseDTO } from './course.dtos';
 import { JwtAuthGuard } from 'src/config/jwt.guard';
@@ -9,6 +9,7 @@ import { OptionalJwtAuthGuard } from 'src/config/jwt-optional.guard';
 import { Request } from 'express';
 import { AuthUser } from 'src/entities';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { JwtAdminAuthGuard } from 'src/config/jwt-admin.guard';
 
 @ApiTags('courses')
 @Controller('courses')
@@ -45,7 +46,7 @@ export class CourseController {
             filter.isPublished = true;
         }
 
-        const pagination = new Pagination<Partial<Course>>([], query.page, query.limit, 0);
+        const pagination = new Pagination<Partial<CourseDTO.ExtraCourseDetails>>([], query.page, query.limit, 0);
         const courses = await this.courseService.list(filter, pagination);
 
         return {
@@ -103,6 +104,26 @@ export class CourseController {
         return {
             message,
             code: 200,
+        }
+    }
+
+    @ApiOperation({ summary: 'Forces a course to start or end'})
+    @Patch('update/:id/status')
+    @UseGuards(JwtAdminAuthGuard)
+    async updateStatus(@Param('id') courseId: string, @Body() payload: CourseDTO.UpdateCourseStatus): Promise<CourseDTO.UpdateCourseStatusResponse> {
+        const id = parseInt(courseId);
+        console.log(payload);
+
+        if (payload.operation === 'start')
+            await this.courseService.startCourse(id);
+        else
+            await this.courseService.endCourse(id);
+
+
+        return {
+            message: "Course status updated",
+            code: 200,
+
         }
     }
 }

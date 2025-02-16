@@ -17,13 +17,13 @@ export class Course {
     @Column({ default: false })
     isPublished: boolean;
 
-    @Column({ type: 'date', default: null, nullable: true })
+    @Column({ type: 'timestamp', default: null, nullable: true })
     startsAt: Date | null;
 
-    @Column({ type: 'date', default: null, nullable: true })
+    @Column({ type: 'timestamp', default: null, nullable: true })
     endsAt: Date | null;
 
-    @Column({ type: 'date', default: null, nullable: true })
+    @Column({ type: 'timestamp', default: null, nullable: true })
     postedAt: Date | null;
 
     @CreateDateColumn()
@@ -40,4 +40,16 @@ export class Course {
 
     @OneToMany(() => CourseParticipant, courseParticipant => courseParticipant.course)
     participants: CourseParticipant[];
+
+    hasEnded(): boolean {
+        return this.endsAt !== null && this.endsAt < new Date();
+    }
+
+    hasStarted(): boolean {
+        return this.startsAt !== null && this.startsAt  < new Date();
+    }
+
+    isOngoing(): boolean {
+        return this.hasStarted() && !this.hasEnded();
+    }
 }

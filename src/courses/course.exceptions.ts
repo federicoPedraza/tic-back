@@ -21,4 +21,25 @@ export namespace CourseException {
             public code: number = 400
         ) {}
     }
+
+    export class CourseHasNotStarted implements Error {
+        constructor(
+            public message: string = 'Course has not started',
+            public code: number = 400
+        ) {}
+    }
+
+    export class CourseHasEnded implements Error {
+        constructor(
+            public message: string = 'Course has ended',
+            public code: number = 400
+        ) {}
+    }
+
+    export class CourseAlreadyStarted implements Error {
+        constructor(
+            public message: string = 'Course has already started',
+            public code: number = 400
+        ) {}
+    }
 }
